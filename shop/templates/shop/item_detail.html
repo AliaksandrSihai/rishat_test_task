@@ -14,7 +14,7 @@
                         </div>
                         <div class="col-6">
 
-                            <form method="POST" action="{% url 'stripe_shop:buy_item' object.pk %}">
+                            <form method="POST" action="{% url 'shop:buy_item' object.pk %}">
                                 {% csrf_token %}
                                Выбрать количество: <input type="text" name="quantity" >
                                 <input type="submit" value="Оформить покупку">
