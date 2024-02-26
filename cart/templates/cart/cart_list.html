@@ -11,11 +11,11 @@
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-center">Корзина:</span>
                     </h4>
-
+                    {% for object in object_list %}
                        <form method="post" action="{% url 'cart:confirm' %}">
                         {% csrf_token %}
-                        {% for object in object_list %}
                         {{ form.as_p }}
+                        <input type="hidden" name="id" value="{{ object.id }}">
                         <input type="hidden" name="stripe_price_id" value="{{ object.product.stripe_price_id }}">
                         <input type="hidden" name="quantity" value="{{ object.quantity }}">
                         <ul class="list-group mb-3">
@@ -25,11 +25,11 @@
                                     <small class="text-muted">{{ object.quantity }} шт.</small>
                                 </div>
                                 <span class="text-muted">Сумма к оплате: {% total_amount object.pk %} {{ object.product.currency }}.</span>
-                                <button type="submit" class="btn btn-primary">Оформить заказ</button>
+                                <button type="submit" class="btn btn-outline-light">Оформить заказ</button>
                             </li>
                         </ul>
+                       </form>
                         {% endfor %}
-                    </form>
 
 
                 </div>
