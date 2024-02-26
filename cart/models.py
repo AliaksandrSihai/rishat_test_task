@@ -20,7 +20,7 @@ class Order(models.Model):
         to="Tax", on_delete=models.CASCADE, related_name="tax", **NULLABLE
     )
     stripe_id = models.CharField(
-        max_length=40, verbose_name="id платежа на stripe", **NULLABLE
+        max_length=128, verbose_name="id платежа на stripe", **NULLABLE
     )
     status = models.BooleanField(default=False, verbose_name="статус платежа")
     order_date = models.DateTimeField(auto_now_add=True)
