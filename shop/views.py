@@ -1,6 +1,7 @@
 from django.forms import inlineformset_factory
-from django.shortcuts import redirect, get_object_or_404
-from django.views import generic, View
+from django.shortcuts import get_object_or_404, redirect
+from django.views import View, generic
+
 from cart.forms import CartForm
 from cart.models import Order
 from shop.models import Item
@@ -37,7 +38,6 @@ class BuyItemView(View):
     def post(self, request, pk):
         quantity_value = request.POST.get("quantity", "1")
         product = get_object_or_404(Item, pk=pk)
-        cart = request.session.get('cart', {})
         Order.objects.create(
             product=product, quantity=int(quantity_value), user=self.request.user
         )

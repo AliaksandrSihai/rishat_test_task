@@ -1,7 +1,7 @@
-from shop.apps import ShopConfig
 from django.urls import path
 
-from shop.views import ListItem, RetrieveItem, BuyItemView
+from shop.apps import ShopConfig
+from shop.views import BuyItemView, ListItem, RetrieveItem
 
 app_name = ShopConfig.name
 

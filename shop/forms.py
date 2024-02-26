@@ -2,6 +2,7 @@ from django import forms
 
 from shop.models import Item
 
+
 class StyleFormMixin:
     """Form stylization"""
 

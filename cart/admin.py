@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from cart.models import Order, Discount, Tax
+from cart.models import Discount, Order, Tax
 
 # Register your models here.
 admin.site.register(Order)

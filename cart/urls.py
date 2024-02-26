@@ -1,10 +1,11 @@
 from django.urls import path
+
 from cart.apps import CartConfig
 from cart.views import (
-    SuccessTemplateView,
     CanceledTemplateView,
-    OrdersListView,
     ConfirmPayment,
+    OrdersListView,
+    SuccessTemplateView,
 )
 
 app_name = CartConfig.name

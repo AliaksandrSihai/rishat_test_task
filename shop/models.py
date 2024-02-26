@@ -5,6 +5,8 @@ from config.settings import STRIPE_SECRET_KEY
 from users.models import NULLABLE
 
 stripe.api_key = STRIPE_SECRET_KEY
+
+
 class Item(models.Model):
     """Модель для товара"""
 

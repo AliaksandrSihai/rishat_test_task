@@ -1,15 +1,14 @@
+from http import HTTPStatus
+
 import stripe
-from django.shortcuts import redirect
-from django.urls import reverse_lazy, reverse
-from django.views import generic, View
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
+from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from cart.forms import CartForm
 from cart.models import Order
-from cart.service import create_payment
-from django.views.decorators.csrf import csrf_exempt
-from http import HTTPStatus
-from django.http import HttpResponse, HttpResponseRedirect
 from config.settings import DOMAIN_NAME, STRIPE_WEBHOOK_KEY
 
 
@@ -53,15 +52,16 @@ class ConfirmPayment(generic.CreateView):
 
     def post(self, request, *args, **kwargs):
         super().post(request, *args, **kwargs)
-        price = request.POST.get('stripe_price_id')
-        quantity = request.POST.get('quantity')
+        price = request.POST.get("stripe_price_id")
+        quantity = request.POST.get("quantity")
         session = stripe.checkout.Session.create(
             success_url=DOMAIN_NAME + reverse("cart:order_success"),
             line_items=[{"price": price, "quantity": quantity}],
             mode="payment",
-            metadata={"payment_id": request.POST.get('id')},
+            metadata={"payment_id": request.POST.get("id")},
         )
         return HttpResponseRedirect(session.url, status=HTTPStatus.SEE_OTHER)
+
 
 @csrf_exempt
 def stripe_webhook_view(request):
@@ -87,4 +87,3 @@ def fulfill_order(session):
     payment.status = True
     payment.stripe_id = session.stripe_id
     payment.save()
-
