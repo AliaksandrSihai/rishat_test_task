@@ -1,0 +1,44 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+{% load my_tags %}
+    <section>
+        <div class="container">
+            <div class="py-2 text-center">
+                <h1>Оформление заказа:</h1>
+            </div>
+            <div class="row g-7">
+                <div class="col-md-7 col-lg-7 order-md-last">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-center">Корзина:</span>
+                    </h4>
+                    {% for object in object_list %}
+                       <form method="post" action="{% url 'cart:confirm' %}">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="hidden" name="id" value="{{ object.id }}">
+                        <input type="hidden" name="stripe_price_id" value="{{ object.product.stripe_price_id }}">
+                        <input type="hidden" name="quantity" value="{{ object.quantity }}">
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item d-flex justify-content-between lh-sm">
+                                <div>
+                                    <h6 class="my-0">{{ object.product.name }}</h6>
+                                    <small class="text-muted">{{ object.quantity }} шт.</small>
+                                </div>
+                                <span class="text-muted">Сумма к оплате: {% total_amount object.pk %} {{ object.product.currency }}.</span>
+                                {% if object.status %}
+                                    <a>Оплачен</a>
+                                {% else %}
+                                <button type="submit" class="btn btn-outline-light">Оформить заказ</button>
+                                {% endif %}
+                            </li>
+                        </ul>
+                       </form>
+                        {% endfor %}
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}

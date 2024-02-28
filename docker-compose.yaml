@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+  postgres_db:
+    image: postgres:16
+    container_name: postgres_db
+    restart: on-failure
+    env_file:
+      - .env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_db:/var/lib/postgresql
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}", "-h", "${POSTGRES_HOST}", "-p", "5432" ]
+      timeout: 30s
+      retries: 3
+    networks:
+      - local
+
+  rishat_test_task:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rishat_test_task
+    restart: on-failure
+    env_file:
+      - .env
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/rishat_test_task/
+      - static_volume:/rishat_test_task/static/
+      - media_volume:/rishat_test_task/media/
+    ports:
+      - '8000:8000'
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://127.0.0.1:8000" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - local
+
+networks:
+  local:
+    driver: bridge
+
+volumes:
+  postgres_db:
+  media_volume:
+  static_volume:
