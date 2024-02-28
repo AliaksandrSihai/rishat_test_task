@@ -36,10 +36,7 @@ class OrdersListView(generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart = Order.objects.select_related("product").filter(
-            user=self.request.user, status=False
-        )
-
+        cart = Order.objects.filter(user=self.request.user, status=False)
         if cart.exists():
             context["object_list"] = cart
         return context

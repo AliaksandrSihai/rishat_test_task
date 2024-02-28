@@ -25,7 +25,11 @@
                                     <small class="text-muted">{{ object.quantity }} шт.</small>
                                 </div>
                                 <span class="text-muted">Сумма к оплате: {% total_amount object.pk %} {{ object.product.currency }}.</span>
+                                {% if object.status %}
+                                    <a>Оплачен</a>
+                                {% else %}
                                 <button type="submit" class="btn btn-outline-light">Оформить заказ</button>
+                                {% endif %}
                             </li>
                         </ul>
                        </form>
